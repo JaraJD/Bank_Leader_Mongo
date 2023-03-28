@@ -7,11 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Data" Version="7.0.2" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Automapper\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.Entities\Domain.Entities.csproj" />
+    <ProjectReference Include="..\Domain.UseCase\Domain.UseCase.csproj" />
+    <ProjectReference Include="..\Infrastructure.DrivenAdapter\Infrastructure.DrivenAdapter.csproj" />
   </ItemGroup>
 
 </Project>
