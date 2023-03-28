@@ -12,6 +12,7 @@ namespace Bank.AppService.Automapper
         public PerfilConfiguracion()
         {
             CreateMap<InsertarNuevaCuenta, Cuenta>().ReverseMap();
+            CreateMap<CuentaMongo, InsertarNuevaCuenta>().ReverseMap();
             CreateMap<CuentaMongo, Cuenta>().ReverseMap();
 
             CreateMap<InsertarNuevaTarjeta, Tarjeta>().ReverseMap();

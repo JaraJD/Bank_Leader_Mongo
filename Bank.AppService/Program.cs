@@ -24,8 +24,8 @@ builder.Services.AddSingleton<IContext>(provider => new Context(builder.Configur
 builder.Services.AddScoped<IClienteCasoDeUso, ClienteCasoDeUso>();
 builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
 
-//builder.Services.AddScoped<ICuentaCasoDeUso, CuentaCasoDeUso>();
-//builder.Services.AddScoped<ICuentaRepositorio, CuentaRepositorio>();
+builder.Services.AddScoped<ICuentaCasoDeUso, CuentaCasoDeUso>();
+builder.Services.AddScoped<ICuentaRepositorio, CuentaRepositorio>();
 
 //builder.Services.AddScoped<ITarjetaCasoDeUso, TarjetaCasoDeUso>();
 //builder.Services.AddScoped<ITarjetaRepositorio, TarjetaRepositorio>();

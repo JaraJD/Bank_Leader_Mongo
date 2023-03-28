@@ -28,7 +28,7 @@ namespace Infrastructure.DrivenAdapter.Repositories
         {
             var guardarCliente = _mapper.Map<ClienteMongo>(cliente);
             await coleccion.InsertOneAsync(guardarCliente);
-            return _mapper.Map<InsertarNuevoCliente>(cliente);
+            return cliente;
         }
 
         public async Task<List<Cliente>> TraerTodosLosClientesAsync()
