@@ -33,7 +33,9 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
         public async Task<List<Cliente>> TraerTodosLosClientesAsync()
         {
-            throw new NotImplementedException();
+            var clientes = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
+            var listaClientes = clientes.ToEnumerable().Select(x => _mapper.Map<Cliente>(x)).ToList();
+            return listaClientes;
         }
 
         public async Task<Cliente> ObtenerClientePorIdAsync(string id)

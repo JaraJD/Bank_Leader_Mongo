@@ -7,26 +7,27 @@ using System.Text.RegularExpressions;
 
 namespace Bank.AppService.Automapper
 {
-	public class PerfilConfiguracion : Profile
-	{
-		public PerfilConfiguracion()
-		{
-			CreateMap<InsertarNuevaCuenta, Cuenta>().ReverseMap();
-			CreateMap<CuentaMongo, Cuenta>().ReverseMap();
+    public class PerfilConfiguracion : Profile
+    {
+        public PerfilConfiguracion()
+        {
+            CreateMap<InsertarNuevaCuenta, Cuenta>().ReverseMap();
+            CreateMap<CuentaMongo, Cuenta>().ReverseMap();
 
-			CreateMap<InsertarNuevaTarjeta, Tarjeta>().ReverseMap();
-			CreateMap<TarjetaMongo, Tarjeta>().ReverseMap();
+            CreateMap<InsertarNuevaTarjeta, Tarjeta>().ReverseMap();
+            CreateMap<TarjetaMongo, Tarjeta>().ReverseMap();
 
-			CreateMap<InsertarNuevaTransaccion, Transaccion>().ReverseMap();
-			CreateMap<TransaccionMongo, Transaccion>().ReverseMap();
+            CreateMap<InsertarNuevaTransaccion, Transaccion>().ReverseMap();
+            CreateMap<TransaccionMongo, Transaccion>().ReverseMap();
 
-			CreateMap<InsertarNuevoCliente, Cliente>().ReverseMap();
-			CreateMap<ClienteMongo, InsertarNuevoCliente>().ReverseMap();
+            CreateMap<InsertarNuevoCliente, Cliente>().ReverseMap();
+            CreateMap<ClienteMongo, InsertarNuevoCliente>().ReverseMap();
+            CreateMap<ClienteMongo, Cliente>().ReverseMap();
 
-			CreateMap<InsertarNuevoProducto, Producto>().ReverseMap();
-			CreateMap<ProductoMongo, Producto>().ReverseMap();
+            CreateMap<InsertarNuevoProducto, Producto>().ReverseMap();
+            CreateMap<ProductoMongo, Producto>().ReverseMap();
 
-		}
+        }
 
-	}
+    }
 }
