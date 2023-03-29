@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Amazon.Runtime.Internal.Transform;
 using AutoMapper;
 using Domain.Entities.Commands;
 using Domain.Entities.Entities;
+using Domain.Entities.Entities.Transacciones;
 using Domain.UseCase.Gateway.Repository;
 using Infrastructure.DrivenAdapter.EntitiesMongo;
 using Infrastructure.DrivenAdapter.Interfaces;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Infrastructure.DrivenAdapter.Repositories
@@ -38,14 +41,24 @@ namespace Infrastructure.DrivenAdapter.Repositories
             return listaClientes;
         }
 
-        public async Task<Cliente> ObtenerClientePorIdAsync(string id)
+        public async Task<Cliente> ObtenerClientePorIdAsync(string cliente_id)
         {
-            throw new NotImplementedException();
+            var filter = Builders<ClienteMongo>.Filter.Eq(c => c.Cliente_Id, cliente_id);
+            var clienteMongo = await coleccion.Find(filter).FirstOrDefaultAsync();
+
+            if (clienteMongo == null)
+            {
+                return null;
+            }
+
+            var cliente = _mapper.Map<Cliente>(clienteMongo);
+            return cliente;
         }
 
         public async Task<List<ClienteConCuenta>> ObtenerClienteTransaccionesAsync()
         {
             throw new NotImplementedException();
+
         }
 
         public async Task<List<ClienteConTarjeta>> ObtenerClienteTarjetaAsync()

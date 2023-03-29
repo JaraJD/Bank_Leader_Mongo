@@ -51,7 +51,7 @@ namespace Bank.AppService.Controllers
             return await _clienteCasoDeUso.ObtenerClienteProducto();
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id}")]
         public async Task<Cliente> Obtener_Cliente_Por_Id(string id)
         {
             return await _clienteCasoDeUso.ObtenerClientePorId(id);
