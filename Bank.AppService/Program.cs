@@ -33,8 +33,8 @@ builder.Services.AddScoped<ICuentaRepositorio, CuentaRepositorio>();
 //builder.Services.AddScoped<IProductoCasoDeUso, ProductoCasoDeUso>();
 //builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 
-//builder.Services.AddScoped<ITransaccionCasoDeUso, TransaccionCasoDeUso>();
-//builder.Services.AddScoped<ITransaccionesRepositorio, TransaccionesRepositorio>();
+builder.Services.AddScoped<ITransaccionCasoDeUso, TransaccionCasoDeUso>();
+builder.Services.AddScoped<ITransaccionesRepositorio, TransaccionesRepositorio>();
 
 
 var app = builder.Build();
