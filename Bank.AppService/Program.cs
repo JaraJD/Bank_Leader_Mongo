@@ -27,11 +27,11 @@ builder.Services.AddScoped<IClienteRepositorio, ClienteRepositorio>();
 builder.Services.AddScoped<ICuentaCasoDeUso, CuentaCasoDeUso>();
 builder.Services.AddScoped<ICuentaRepositorio, CuentaRepositorio>();
 
-//builder.Services.AddScoped<ITarjetaCasoDeUso, TarjetaCasoDeUso>();
-//builder.Services.AddScoped<ITarjetaRepositorio, TarjetaRepositorio>();
+builder.Services.AddScoped<ITarjetaCasoDeUso, TarjetaCasoDeUso>();
+builder.Services.AddScoped<ITarjetaRepositorio, TarjetaRepositorio>();
 
-//builder.Services.AddScoped<IProductoCasoDeUso, ProductoCasoDeUso>();
-//builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
+builder.Services.AddScoped<IProductoCasoDeUso, ProductoCasoDeUso>();
+builder.Services.AddScoped<IProductoRepositorio, ProductoRepositorio>();
 
 builder.Services.AddScoped<ITransaccionCasoDeUso, TransaccionCasoDeUso>();
 builder.Services.AddScoped<ITransaccionesRepositorio, TransaccionesRepositorio>();

@@ -21,13 +21,13 @@ namespace Bank.AppService.Controllers
 		}
 
 		[HttpGet]
-		public async Task<List<Tarjeta>> Obtener_Listado_Directores()
+		public async Task<List<Tarjeta>> Obtener_Listado_Trajetas()
 		{
 			return await _tarjetaCasoDeUso.ObtenerTarjetas();
 		}
 
 		[HttpPost]
-		public async Task<InsertarNuevaTarjeta> Registrar_Director(InsertarNuevaTarjeta command)
+		public async Task<InsertarNuevaTarjeta> Registrar_Tarjeta(InsertarNuevaTarjeta command)
 		{
 			return await _tarjetaCasoDeUso.AgregarTarjeta(command);
 		}
