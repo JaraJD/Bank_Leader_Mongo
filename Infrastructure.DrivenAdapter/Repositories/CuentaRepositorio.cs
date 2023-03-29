@@ -33,7 +33,9 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
         public async Task<List<Cuenta>> TraerTodasLasCuentas()
         {
-            throw new NotImplementedException();
+            var cuentas = await coleccion.FindAsync(Builders<CuentaMongo>.Filter.Empty);
+            var listaCuentas = cuentas.ToEnumerable().Select(x => _mapper.Map<Cuenta>(x)).ToList();
+            return listaCuentas;
         }
     }
 }
