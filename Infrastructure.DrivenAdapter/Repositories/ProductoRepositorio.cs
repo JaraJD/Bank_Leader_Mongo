@@ -22,13 +22,28 @@ namespace Infrastructure.DrivenAdapter.Repositories
 		public ProductoRepositorio(IContext context, IMapper mapper)
 		{
 			coleccion = context.Productos;
-			_mapper= mapper;
+			coleccionTransaccion = context.Transacciones;
+			_mapper = mapper;
 		}
 
 		public async Task<InsertarNuevoProducto> InsertarProductoAsync(InsertarNuevoProducto producto)
 		{
 			var guardarProducto = _mapper.Map<ProductoMongo>(producto);
 			await coleccion.InsertOneAsync(guardarProducto);
+
+			var transaccionProducto = new Transaccion
+			{
+				Cuenta_Id = (string?)null,
+				Tarjeta_Id = (string?)null,
+				Producto_Id = guardarProducto.Producto_Id,
+				Fecha = DateTime.Now,
+				Tipo_Transaccion = "Creacion de Producto",
+				Descripcion = "Se crea el producto del usuario con el cliente_id " + producto.Cliente_Id + ".   ",  // El espacio al final es para que el campo tenga el mismo tamaño que los otros campos de la tabla.
+				Monto = producto.Monto
+			};
+
+			var transaccionAguardar = _mapper.Map<TransaccionMongo>(transaccionProducto);
+			await coleccionTransaccion.InsertOneAsync(transaccionAguardar);
 			return producto;
 		}
 
