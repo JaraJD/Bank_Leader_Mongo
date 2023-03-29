@@ -16,6 +16,7 @@ namespace Infrastructure.DrivenAdapter.Repositories
 	public class ProductoRepositorio : IProductoRepositorio
 	{
 		private readonly IMongoCollection<ProductoMongo> coleccion;
+		private readonly IMongoCollection<TransaccionMongo> coleccionTransaccion;
 		private readonly IMapper _mapper;
 
 		public ProductoRepositorio(IContext context, IMapper mapper)
