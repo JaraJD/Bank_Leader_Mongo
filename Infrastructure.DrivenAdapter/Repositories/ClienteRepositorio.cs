@@ -58,7 +58,6 @@ namespace Infrastructure.DrivenAdapter.Repositories
         public async Task<List<ClienteConCuenta>> ObtenerClienteTransaccionesAsync()
         {
             throw new NotImplementedException();
-
         }
 
         public async Task<List<ClienteConTarjeta>> ObtenerClienteTarjetaAsync()
