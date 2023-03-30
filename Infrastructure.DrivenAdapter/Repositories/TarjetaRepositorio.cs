@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using Domain.Entities.Commands;
 using Domain.Entities.Entities;
 using Domain.UseCase.Gateway.Repository;
@@ -28,6 +29,14 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
 		public async Task<InsertarNuevaTarjeta> InsertarTarjetaAsync(InsertarNuevaTarjeta tarjeta)
 		{
+			Guard.Against.Null(tarjeta, nameof(tarjeta));
+			Guard.Against.NullOrEmpty(tarjeta.Cliente_Id.ToString(), nameof(tarjeta.Cliente_Id));
+			Guard.Against.NullOrEmpty(tarjeta.Tipo_Tarjeta, nameof(tarjeta.Tipo_Tarjeta));
+			Guard.Against.NullOrEmpty(tarjeta.Fecha_Emision.ToString(), nameof(tarjeta.Fecha_Emision));
+			Guard.Against.NullOrEmpty(tarjeta.Fecha_Vencimiento.ToString(), nameof(tarjeta.Fecha_Vencimiento));
+			Guard.Against.NullOrEmpty(tarjeta.Limite_Credito.ToString(), nameof(tarjeta.Limite_Credito));
+			Guard.Against.NullOrEmpty(tarjeta.Estado, nameof(tarjeta.Estado));
+
 			var guardarTrajeta = _mapper.Map<TarjetaMongo>(tarjeta);
 			await coleccion.InsertOneAsync(guardarTrajeta);
 

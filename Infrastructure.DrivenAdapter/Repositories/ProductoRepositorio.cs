@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Ardalis.GuardClauses;
+using AutoMapper;
 using Domain.Entities.Commands;
 using Domain.Entities.Entities;
 using Domain.UseCase.Gateway.Repository;
@@ -28,6 +29,16 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
 		public async Task<InsertarNuevoProducto> InsertarProductoAsync(InsertarNuevoProducto producto)
 		{
+
+			Guard.Against.Null(producto, nameof(producto));
+			Guard.Against.NullOrEmpty(producto.Cliente_Id.ToString(), nameof(producto.Cliente_Id));
+			Guard.Against.NullOrEmpty(producto.Tipo_Producto, nameof(producto.Tipo_Producto));
+			Guard.Against.NullOrEmpty(producto.Descripcion, nameof(producto.Descripcion));
+			Guard.Against.NullOrEmpty(producto.Plazo.ToString(), nameof(producto.Plazo));
+			Guard.Against.NullOrEmpty(producto.Monto.ToString(), nameof(producto.Monto));
+			Guard.Against.NullOrEmpty(producto.Tasa_Interes.ToString(), nameof(producto.Tasa_Interes));
+			Guard.Against.NullOrEmpty(producto.Estado, nameof(producto.Estado));
+
 			var guardarProducto = _mapper.Map<ProductoMongo>(producto);
 			await coleccion.InsertOneAsync(guardarProducto);
 

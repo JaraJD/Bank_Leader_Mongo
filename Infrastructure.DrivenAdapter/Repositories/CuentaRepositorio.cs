@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ardalis.GuardClauses;
 using AutoMapper;
 using Domain.Entities.Commands;
 using Domain.Entities.Entities;
@@ -34,7 +35,17 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
 		public async Task<InsertarNuevaCuenta> InsertarCuentaAsync(InsertarNuevaCuenta cuenta)
         {
-            var cuentaGuardar = _mapper.Map<CuentaMongo>(cuenta);
+
+			Guard.Against.Null(cuenta, nameof(cuenta));
+			Guard.Against.NullOrEmpty(cuenta.Cliente_Id.ToString(), nameof(cuenta.Cliente_Id));
+			Guard.Against.NullOrEmpty(cuenta.Tipo_Cuenta, nameof(cuenta.Tipo_Cuenta));
+			Guard.Against.NullOrEmpty(cuenta.Saldo.ToString(), nameof(cuenta.Saldo));
+			Guard.Against.NullOrEmpty(cuenta.Fecha_Apertura.ToString(), nameof(cuenta.Fecha_Apertura));
+			Guard.Against.NullOrEmpty(cuenta.Fecha_Cierre.ToString(), nameof(cuenta.Fecha_Cierre));
+			Guard.Against.NullOrEmpty(cuenta.Tasa_Interes.ToString(), nameof(cuenta.Tasa_Interes));
+			Guard.Against.NullOrEmpty(cuenta.Estado, nameof(cuenta.Estado));
+
+			var cuentaGuardar = _mapper.Map<CuentaMongo>(cuenta);
             await coleccion.InsertOneAsync(cuentaGuardar);
 
             var transaccionCuenta = new Transaccion

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Amazon.Runtime.Internal.Transform;
+using Ardalis.GuardClauses;
 using AutoMapper;
 using Domain.Entities.Commands;
 using Domain.Entities.Entities;
@@ -37,7 +38,15 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
         public async Task<InsertarNuevoCliente> InsertarClienteAsync(InsertarNuevoCliente cliente)
         {
-            var guardarCliente = _mapper.Map<ClienteMongo>(cliente);
+			Guard.Against.Null(cliente, nameof(cliente));
+			Guard.Against.NullOrEmpty(cliente.Nombre, nameof(cliente.Nombre), "Nombre requerido. ");
+			Guard.Against.NullOrEmpty(cliente.Apellido, nameof(cliente.Apellido));
+			Guard.Against.NullOrEmpty(cliente.Fecha_Nacimiento.ToString(), nameof(cliente.Fecha_Nacimiento));
+			Guard.Against.NullOrEmpty(cliente.Telefono, nameof(cliente.Telefono));
+			Guard.Against.NullOrEmpty(cliente.Correo, nameof(cliente.Correo));
+			Guard.Against.NullOrEmpty(cliente.Genero, nameof(cliente.Genero));
+
+			var guardarCliente = _mapper.Map<ClienteMongo>(cliente);
             await coleccion.InsertOneAsync(guardarCliente);
             return cliente;
         }

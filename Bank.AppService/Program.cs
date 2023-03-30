@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Connections;
 using Infrastructure.DrivenAdapter.Interfaces;
 using Infrastructure.DrivenAdapter;
 using Infrastructure.DrivenAdapter.Repositories;
+using Bank.AppService.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +50,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseMiddleware<ErrorHandleMiddleware>();
 
 app.MapControllers();
 
