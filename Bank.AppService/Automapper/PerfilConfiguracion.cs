@@ -57,7 +57,7 @@ namespace Bank.AppService.Automapper
             CreateMap<ProductoMongo, ProductoConTransaccion>()
                 .ForMember(dest => dest.Transacciones, opt => opt.Ignore());
 
-            CreateMap<ProductoMongo, TransaccionProducto>();
+            CreateMap<TransaccionMongo, TransaccionProducto>();
         }
 
     }

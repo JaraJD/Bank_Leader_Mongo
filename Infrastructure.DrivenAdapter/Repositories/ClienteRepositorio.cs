@@ -123,7 +123,31 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
         public async Task<List<ClienteConProducto>> ObtenerClienteProductoAsync()
         {
-            throw new NotImplementedException();
+            var clientesMongo = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
+            var clientes = clientesMongo.ToEnumerable().Select(x => _mapper.Map<ClienteConProducto>(x)).ToList();
+
+            var productoMongo = await coleccionProductos.FindAsync(Builders<ProductoMongo>.Filter.Empty);
+            var productos = productoMongo.ToEnumerable().Select(x => _mapper.Map<ProductoConTransaccion>(x)).ToList();
+
+            var transaccionesMongo = await coleccionTransacciones.FindAsync(Builders<TransaccionMongo>.Filter.Empty);
+            var transacciones = transaccionesMongo.ToEnumerable().Select(x => _mapper.Map<TransaccionProducto>(x)).ToList();
+
+            var clientesDic = new Dictionary<string, ClienteConProducto>();
+
+            foreach (var cliente in clientes)
+            {
+                var productosCliente = productos.Where(c => c.Cliente_Id == cliente.Cliente_Id).ToList();
+                cliente.Productos = productosCliente;
+
+                foreach (var producto in productosCliente)
+                {
+                    producto.Transacciones = transacciones.Where(t => t.Producto_Id == producto.Producto_Id).ToList();
+                }
+
+                clientesDic.Add(cliente.Cliente_Id, cliente);
+            }
+
+            return clientesDic.Values.ToList();
         }
 
         public async Task<ClienteConActivos> ObtenerClienteActivosAsync(string id)
