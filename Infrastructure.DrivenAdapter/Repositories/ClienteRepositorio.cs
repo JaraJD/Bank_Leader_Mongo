@@ -152,7 +152,20 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
         public async Task<ClienteConActivos> ObtenerClienteActivosAsync(string id)
         {
-            throw new NotImplementedException();
-        }
+			var filter = Builders<ClienteMongo>.Filter.Eq(c => c.Cliente_Id, id);
+
+			var cuentasTask = coleccionCuentas.Find(c => c.Cliente_Id == id && c.Saldo > 0).ToList();
+			var tarjetasTask = coleccionTarjetas.Find(c => c.Cliente_Id == id && c.Limite_Credito > 0).ToList();
+			var productosTask = coleccionProductos.Find(c => c.Cliente_Id == id).ToList();
+
+			var cliente = await coleccion.Find(filter).FirstOrDefaultAsync();
+            var clienteActivos = _mapper.Map<ClienteConActivos>(cliente);
+
+            clienteActivos.Cuentas = _mapper.Map<List<Cuenta>>(cuentasTask);
+            clienteActivos.Tarjetas = _mapper.Map<List<Tarjeta>>(tarjetasTask);
+            clienteActivos.Productos = _mapper.Map<List<Producto>>(productosTask);
+
+            return clienteActivos;
+		}
     }
 }

@@ -28,6 +28,7 @@ namespace Bank.AppService.Automapper
             CreateMap<ClienteMongo, InsertarNuevoCliente>().ReverseMap();
             CreateMap<ClienteMongo, Cliente>().ReverseMap();
             CreateMap<ClienteMongo, ClienteConTarjeta>().ReverseMap();
+            CreateMap<ClienteMongo, ClienteConActivos>().ReverseMap();
 
 			CreateMap<InsertarNuevoProducto, Producto>().ReverseMap();
             CreateMap<ProductoMongo, InsertarNuevoProducto>().ReverseMap();
