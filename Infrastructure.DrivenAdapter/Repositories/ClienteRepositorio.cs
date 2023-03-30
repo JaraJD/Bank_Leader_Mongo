@@ -20,6 +20,8 @@ namespace Infrastructure.DrivenAdapter.Repositories
     {
         IMongoCollection<ClienteMongo> coleccion;
         private readonly IMongoCollection<CuentaMongo> coleccionCuentas;
+        private readonly IMongoCollection<TarjetaMongo> coleccionTarjetas;
+        private readonly IMongoCollection<ProductoMongo> coleccionProductos;
         private readonly IMongoCollection<TransaccionMongo> coleccionTransacciones;
         private readonly IMapper _mapper;
 
@@ -27,6 +29,8 @@ namespace Infrastructure.DrivenAdapter.Repositories
         {
             coleccion = context.Clientes;
             coleccionCuentas = context.Cuentas;
+            coleccionTarjetas = context.Tarjetas;
+            coleccionProductos = context.Productos;
             coleccionTransacciones = context.Transacciones;
             _mapper = mapper;
         }
@@ -89,25 +93,61 @@ namespace Infrastructure.DrivenAdapter.Repositories
         }
 
         public async Task<List<ClienteConTarjeta>> ObtenerClienteTarjetaAsync()
-        { 
-		    //var tarjetas = await coleccionTarjetas.FindAsync(Builders<TarjetaMongo>.Filter.Empty);
-		    //var listaTarjetas = tarjetas.ToEnumerable().Select(x => _mapper.Map<Tarjeta>(x)).ToList();
-        
-			var clientes = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
-			var listaClientes = clientes.ToEnumerable().Select(x => _mapper.Map<ClienteConTarjeta>(x)).ToList();
+        {
+            var clientesMongo = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
+            var clientes = clientesMongo.ToEnumerable().Select(x => _mapper.Map<ClienteConTarjeta>(x)).ToList();
 
-			foreach (var cliente in listaClientes)
+            var tarjetasMongo = await coleccionTarjetas.FindAsync(Builders<TarjetaMongo>.Filter.Empty);
+            var cuentas = tarjetasMongo.ToEnumerable().Select(x => _mapper.Map<TarjetaConTransaccion>(x)).ToList();
+
+            var transaccionesMongo = await coleccionTransacciones.FindAsync(Builders<TransaccionMongo>.Filter.Empty);
+            var transacciones = transaccionesMongo.ToEnumerable().Select(x => _mapper.Map<TransaccionTarjeta>(x)).ToList();
+
+            var clientesDic = new Dictionary<string, ClienteConTarjeta>();
+
+            foreach (var cliente in clientes)
             {
-                Console.WriteLine(cliente);
+                var tarjetasCliente = cuentas.Where(c => c.Cliente_Id == cliente.Cliente_Id).ToList();
+                cliente.Tarjetas = tarjetasCliente;
+
+                foreach (var tarjeta in tarjetasCliente)
+                {
+                    tarjeta.Transacciones = transacciones.Where(t => t.Tarjeta_Id == tarjeta.Tarjeta_Id).ToList();
+                }
+
+                clientesDic.Add(cliente.Cliente_Id, cliente);
             }
 
-
-			return listaClientes;
-		}
+            return clientesDic.Values.ToList();
+        }
 
         public async Task<List<ClienteConProducto>> ObtenerClienteProductoAsync()
         {
-            throw new NotImplementedException();
+            var clientesMongo = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
+            var clientes = clientesMongo.ToEnumerable().Select(x => _mapper.Map<ClienteConProducto>(x)).ToList();
+
+            var productoMongo = await coleccionProductos.FindAsync(Builders<ProductoMongo>.Filter.Empty);
+            var productos = productoMongo.ToEnumerable().Select(x => _mapper.Map<ProductoConTransaccion>(x)).ToList();
+
+            var transaccionesMongo = await coleccionTransacciones.FindAsync(Builders<TransaccionMongo>.Filter.Empty);
+            var transacciones = transaccionesMongo.ToEnumerable().Select(x => _mapper.Map<TransaccionProducto>(x)).ToList();
+
+            var clientesDic = new Dictionary<string, ClienteConProducto>();
+
+            foreach (var cliente in clientes)
+            {
+                var productosCliente = productos.Where(c => c.Cliente_Id == cliente.Cliente_Id).ToList();
+                cliente.Productos = productosCliente;
+
+                foreach (var producto in productosCliente)
+                {
+                    producto.Transacciones = transacciones.Where(t => t.Producto_Id == producto.Producto_Id).ToList();
+                }
+
+                clientesDic.Add(cliente.Cliente_Id, cliente);
+            }
+
+            return clientesDic.Values.ToList();
         }
 
         public async Task<ClienteConActivos> ObtenerClienteActivosAsync(string id)

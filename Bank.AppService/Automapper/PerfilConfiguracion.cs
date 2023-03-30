@@ -33,6 +33,7 @@ namespace Bank.AppService.Automapper
             CreateMap<ProductoMongo, InsertarNuevoProducto>().ReverseMap();
             CreateMap<ProductoMongo, Producto>().ReverseMap();
 
+            //Cuenta
             CreateMap<ClienteMongo, ClienteConCuenta>()
                 .ForMember(dest => dest.Cuentas, opt => opt.Ignore());
 
@@ -40,7 +41,24 @@ namespace Bank.AppService.Automapper
                 .ForMember(dest => dest.Transacciones, opt => opt.Ignore());
 
             CreateMap<TransaccionMongo, TransaccionCuenta>();
+           
+            //Tarjeta
+            CreateMap<ClienteMongo, ClienteConTarjeta>()
+                .ForMember(dest => dest.Tarjetas, opt => opt.Ignore());
 
+            CreateMap<TarjetaMongo, TarjetaConTransaccion>()
+                .ForMember(dest => dest.Transacciones, opt => opt.Ignore());
+
+            CreateMap<TransaccionMongo, TransaccionTarjeta>();
+           
+            //Producto
+            CreateMap<ClienteMongo, ClienteConProducto>()
+                .ForMember(dest => dest.Productos, opt => opt.Ignore());
+
+            CreateMap<ProductoMongo, ProductoConTransaccion>()
+                .ForMember(dest => dest.Transacciones, opt => opt.Ignore());
+
+            CreateMap<TransaccionMongo, TransaccionProducto>();
         }
 
     }
