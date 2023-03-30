@@ -89,9 +89,21 @@ namespace Infrastructure.DrivenAdapter.Repositories
         }
 
         public async Task<List<ClienteConTarjeta>> ObtenerClienteTarjetaAsync()
-        {
-            throw new NotImplementedException();
-        }
+        { 
+		    //var tarjetas = await coleccionTarjetas.FindAsync(Builders<TarjetaMongo>.Filter.Empty);
+		    //var listaTarjetas = tarjetas.ToEnumerable().Select(x => _mapper.Map<Tarjeta>(x)).ToList();
+        
+			var clientes = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
+			var listaClientes = clientes.ToEnumerable().Select(x => _mapper.Map<ClienteConTarjeta>(x)).ToList();
+
+			foreach (var cliente in listaClientes)
+            {
+                Console.WriteLine(cliente);
+            }
+
+
+			return listaClientes;
+		}
 
         public async Task<List<ClienteConProducto>> ObtenerClienteProductoAsync()
         {
