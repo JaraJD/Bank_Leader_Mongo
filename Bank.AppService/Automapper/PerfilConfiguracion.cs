@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Domain.Entities.Commands;
 using Domain.Entities.Entities;
+using Domain.Entities.Entities.Transacciones;
 using Infrastructure.DrivenAdapter.EntitiesMongo;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -31,7 +32,15 @@ namespace Bank.AppService.Automapper
             CreateMap<ProductoMongo, InsertarNuevoProducto>().ReverseMap();
             CreateMap<ProductoMongo, Producto>().ReverseMap();
 
-		}
+            CreateMap<ClienteMongo, ClienteConCuenta>()
+                .ForMember(dest => dest.Cuentas, opt => opt.Ignore());
+
+            CreateMap<CuentaMongo, CuentaConTransaccion>()
+                .ForMember(dest => dest.Transacciones, opt => opt.Ignore());
+
+            CreateMap<TransaccionMongo, TransaccionCuenta>();
+
+        }
 
     }
 }

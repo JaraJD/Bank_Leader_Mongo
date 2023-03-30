@@ -12,7 +12,7 @@ namespace Infrastructure.DrivenAdapter.EntitiesMongo
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Transaccion_Id { get; set; }
-        public string Cuenta_Id { get; set; }
+        public string? Cuenta_Id { get; set; }
         public string? Tarjeta_Id { get; set; }
         public string? Producto_Id { get; set; }
         public DateTime Fecha { get; set; }

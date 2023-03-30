@@ -18,12 +18,16 @@ namespace Infrastructure.DrivenAdapter.Repositories
 {
     public class ClienteRepositorio : IClienteRepositorio
     {
-        private readonly IMongoCollection<ClienteMongo> coleccion;
+        IMongoCollection<ClienteMongo> coleccion;
+        private readonly IMongoCollection<CuentaMongo> coleccionCuentas;
+        private readonly IMongoCollection<TransaccionMongo> coleccionTransacciones;
         private readonly IMapper _mapper;
 
         public ClienteRepositorio(IContext context, IMapper mapper)
         {
             coleccion = context.Clientes;
+            coleccionCuentas = context.Cuentas;
+            coleccionTransacciones = context.Transacciones;
             _mapper = mapper;
         }
 
@@ -57,7 +61,31 @@ namespace Infrastructure.DrivenAdapter.Repositories
 
         public async Task<List<ClienteConCuenta>> ObtenerClienteTransaccionesAsync()
         {
-            throw new NotImplementedException();
+            var clientesMongo = await coleccion.FindAsync(Builders<ClienteMongo>.Filter.Empty);
+            var clientes = clientesMongo.ToEnumerable().Select(x => _mapper.Map<ClienteConCuenta>(x)).ToList();
+
+            var cuentasMongo = await coleccionCuentas.FindAsync(Builders<CuentaMongo>.Filter.Empty);
+            var cuentas = cuentasMongo.ToEnumerable().Select(x => _mapper.Map<CuentaConTransaccion>(x)).ToList();
+
+            var transaccionesMongo = await coleccionTransacciones.FindAsync(Builders<TransaccionMongo>.Filter.Empty);
+            var transacciones = transaccionesMongo.ToEnumerable().Select(x => _mapper.Map<TransaccionCuenta>(x)).ToList();
+
+            var clientesDic = new Dictionary<string, ClienteConCuenta>();
+
+            foreach (var cliente in clientes)
+            {
+                var cuentasCliente = cuentas.Where(c => c.Cliente_Id == cliente.Cliente_Id).ToList();
+                cliente.Cuentas = cuentasCliente;
+
+                foreach (var cuenta in cuentasCliente)
+                {
+                    cuenta.Transacciones = transacciones.Where(t => t.Cuenta_Id == cuenta.Cuenta_Id).ToList();
+                }
+
+                clientesDic.Add(cliente.Cliente_Id, cliente);
+            }
+
+            return clientesDic.Values.ToList();
         }
 
         public async Task<List<ClienteConTarjeta>> ObtenerClienteTarjetaAsync()

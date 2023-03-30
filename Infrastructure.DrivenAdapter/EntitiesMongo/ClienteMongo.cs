@@ -19,5 +19,6 @@ namespace Infrastructure.DrivenAdapter.EntitiesMongo
         public string Telefono { get; set; }
         public string Correo { get; set; }
         public string Genero { get; set; }
+
     }
 }
