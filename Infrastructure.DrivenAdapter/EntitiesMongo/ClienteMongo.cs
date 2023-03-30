@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities.Entities;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Infrastructure.DrivenAdapter.EntitiesMongo
@@ -18,5 +19,6 @@ namespace Infrastructure.DrivenAdapter.EntitiesMongo
         public string Telefono { get; set; }
         public string Correo { get; set; }
         public string Genero { get; set; }
+
     }
 }
