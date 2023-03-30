@@ -16,11 +16,13 @@ namespace Infrastructure.DrivenAdapter.Repositories
 	public class TarjetaRepositorio : ITarjetaRepositorio
 	{
 		private readonly IMongoCollection<TarjetaMongo> coleccion;
+		private readonly IMongoCollection<TransaccionMongo> coleccionTransaccion;
 		private readonly IMapper _mapper;
 
 		public TarjetaRepositorio(IContext context, IMapper mapper)
 		{
 			coleccion = context.Tarjetas;
+			coleccionTransaccion = context.Transacciones;
 			_mapper = mapper;
 		}
 
@@ -28,6 +30,21 @@ namespace Infrastructure.DrivenAdapter.Repositories
 		{
 			var guardarTrajeta = _mapper.Map<TarjetaMongo>(tarjeta);
 			await coleccion.InsertOneAsync(guardarTrajeta);
+
+			var transaccionTarjeta = new Transaccion
+			{
+				Cuenta_Id = (string?)null,
+				Tarjeta_Id = guardarTrajeta.Tarjeta_Id,
+				Producto_Id = (string?)null,
+				Fecha = DateTime.Now,
+				Tipo_Transaccion = "Creacion de Tarjeta",
+				Descripcion = "Se crea la tarjeta del usuario con el cliente_id " + tarjeta.Cliente_Id + ".   ",  // El espacio al final es para que el campo tenga el mismo tamaño que los otros campos de la tabla.
+				Monto = tarjeta.Limite_Credito
+			};
+
+			var transaccionAguardar = _mapper.Map<TransaccionMongo>(transaccionTarjeta);
+			await coleccionTransaccion.InsertOneAsync(transaccionAguardar);
+
 			return tarjeta;
 		}
 

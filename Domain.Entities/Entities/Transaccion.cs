@@ -35,5 +35,6 @@ namespace Domain.Entities.Entities
 
         [Required]
         public decimal Monto { get; set; }
+
     }
 }
